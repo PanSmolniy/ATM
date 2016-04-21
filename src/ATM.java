@@ -1,6 +1,10 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 //
 //
@@ -11,6 +15,7 @@ public class ATM
 
     int moneyInTotal;
     int banknotes;
+    boolean isWorking;
 
 
     BufferedReader stdin;
@@ -18,6 +23,7 @@ public class ATM
     String output;
 
     public ATM() {
+        isWorking = true;
         moneyInTotal = 0;
         stdin = new BufferedReader(new InputStreamReader(System.in));
         output = "Hello";
@@ -25,7 +31,7 @@ public class ATM
 
     public void run() throws IOException {
 
-        while (true)
+        while (isWorking)
         {
             showUserData();
             readUserData();
@@ -39,7 +45,7 @@ public class ATM
 
     public void readUserData() throws IOException {
 
-
+        output = "";
         String command = stdin.readLine().toLowerCase();
 
         String inputsArray[] = command.split(" ");
@@ -47,14 +53,12 @@ public class ATM
 
             case "put" : put(command, inputsArray); break;
             case "get" : get(); break;
-            case "dump" : dump(); break;
+            case "dump" : dump(command); break;
             case "state" : state(command); break;
-            //case "quit" : quit(); break;
+            case "quit" : quit(command); break;
             default:error(command);
 
         }
-
-
     }
 
     public void error(String command)
@@ -65,7 +69,7 @@ public class ATM
 
     public void put(String command, String[] arr)
     {
-        output = "";
+        //output = "";
         System.out.println(">"+command);
         countMoneyInTotal(Integer.parseInt(arr[1]), Integer.parseInt(arr[2]));
     }
@@ -76,21 +80,39 @@ public class ATM
 
     }
 
-    public void dump()
+    public void dump(String command)
     {
+        System.out.println(">" + command);
+
+        List<Banknotes> list = Arrays.asList(Banknotes.values());
+
+        BanknotesComparator comp = new BanknotesComparator();
+        Collections.sort(list, comp);
+
+        StringBuilder sb = new StringBuilder("");
+        for (Banknotes a : list)
+        {
+            sb.append("Купюр номиналом " + a.getValue() + " всего в банкомате " + a.getCount());
+            if (list.indexOf(a) != (list.size()-1))
+            sb.append("\n");
+        }
+        output = sb.toString();
+
+
 
     }
 
     public void state(String command)
     {
-        output = "";
+        //output = "";
         System.out.println(">" + command);
         output = moneyInTotal+"";
     }
 
     public void quit(String command)
     {
-
+        isWorking = false;
+        System.out.println(">" + command);
     }
 
     public void countMoneyInTotal(int banknote, int amount)
@@ -108,12 +130,6 @@ public class ATM
         }
 
     }
-
-
-
-
-
-
 
 
 }

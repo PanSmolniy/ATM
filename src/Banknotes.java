@@ -2,7 +2,7 @@
 //
 //
 //иналом 1, 3, 5, 10, 25, 50, 100, 500, 1000 и 5000 рублей
-public enum Banknotes
+public enum Banknotes implements Comparable<Banknotes>
 {
     ONE(1), THREE(3), FIVE(5), TEN(10), TWENTY_FIVE(25), FIFTY(50),
     HUNDRED(100), FIVE_HUNDRED(500), THOUSAND(1000), FIVE_THOUSAND(5000);
@@ -32,4 +32,5 @@ public enum Banknotes
     public void setValue(int value) {
         this.value = value;
     }
+
 }
