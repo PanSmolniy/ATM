@@ -29,8 +29,8 @@ public enum Banknotes implements Comparable<Banknotes>
         this.count = count;
     }
 
-    public void setValue(int value) {
+    /*public void setValue(int value) {
         this.value = value;
-    }
+    }*/
 
 }

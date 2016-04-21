@@ -14,7 +14,7 @@ public class ATM
 {
 
     int moneyInTotal;
-    int banknotes;
+    //int banknotes;
     boolean isWorking;
 
 
@@ -50,9 +50,8 @@ public class ATM
 
         String inputsArray[] = command.split(" ");
         switch (inputsArray[0]) {
-
             case "put" : put(command, inputsArray); break;
-            case "get" : get(); break;
+            case "get" : get(command, Integer.parseInt(inputsArray[1])); break;
             case "dump" : dump(command); break;
             case "state" : state(command); break;
             case "quit" : quit(command); break;
@@ -74,10 +73,68 @@ public class ATM
         countMoneyInTotal(Integer.parseInt(arr[1]), Integer.parseInt(arr[2]));
     }
 
-    public void get()
+    public void get(String command, int value)
     {
+        int valueNeeded = value;
+        StringBuilder sb = new StringBuilder("");
+        System.out.println(">" + command);
+        int total = 0;
+        int rest = 0;
+
+        List<Banknotes> banknotes = Arrays.asList(Banknotes.values());
+        
+        while (valueNeeded > 0 && moneyInTotal > 0) {
+            for (Banknotes a : banknotes) {
+                int aCount = 0;
+                if (a.getValue() <= valueNeeded) {
+                    if (a.getCount() > 0) {
+                        do {
+
+                            aCount++;
+                            valueNeeded -= a.getValue();
+                            total += a.getValue();
+                            a.setCount(a.getCount() - aCount);
+                            moneyInTotal -= a.getValue();
+                        } while (valueNeeded > 0 || a.getCount() == 0);
+                    }
+                }
+            }
+        }
+        sb.append("всего " + total);
+        output = sb.toString();
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                /*if (a.getValue() <= valueNeeded)
+                {
+                    int aCount = 0;
+                    int aTotal = a.getCount();
+                    while (aTotal > 0 && valueNeeded < a.getValue()) {
+                        valueNeeded -= a.getValue();
+                        aTotal--;
+                        a.setCount(aTotal);
+                        moneyInTotal -= a.getValue();
+                        aCount++;
+                    }
+                    sb.append(a.getValue()+"="+aCount+", ");
+                }
+            }
+        }
+        sb.append("всего " + value);
+        output = sb.toString();*/
     }
 
     public void dump(String command)
@@ -97,9 +154,6 @@ public class ATM
             sb.append("\n");
         }
         output = sb.toString();
-
-
-
     }
 
     public void state(String command)
@@ -128,8 +182,5 @@ public class ATM
                 break;
             } else output = "Нет такой банкноты";
         }
-
     }
-
-
 }
