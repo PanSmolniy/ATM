@@ -84,22 +84,27 @@ public class ATM
         StringBuilder sb = new StringBuilder("");
         System.out.println(">" + command);
         int total = 0;
-        int rest = 0;
+        //int rest = 0;
 
         List<Banknotes> banknotes = Arrays.asList(Banknotes.values());
         BanknotesComparator comp = new BanknotesComparator();
         Collections.sort(banknotes, comp);
 
-        while (valueNeeded > 0 && moneyInTotal > 0) {
+        boolean run = true;
+        while (valueNeeded > 0 && moneyInTotal > 0 && run) {
             for (Banknotes a : banknotes) {
+                if (a.getValue() == 1 && a.getCount() == 0) run = false;
                 int aCount = 0;
                 int count = a.getCount();
-                if (a.getValue() <= valueNeeded) {
+                int banknoteValue = a.getValue();
+                if (banknoteValue <= valueNeeded) {
                     if (a.getCount() > 0) {
+
                         sb.append(a.getValue()+"=");
                         do {
+                            if (banknoteValue > valueNeeded) break;
                             aCount++;
-                            valueNeeded -= a.getValue();
+                            valueNeeded -= banknoteValue;
                             total += a.getValue();
                             a.setCount(count - aCount);
                             moneyInTotal -= a.getValue();
@@ -110,34 +115,10 @@ public class ATM
             }
         }
         sb.append("всего " + total);
+        if (valueNeeded > 0) sb.append("\nбез " + valueNeeded);
 
-
-
-       /* if (total < valueNeeded) try {
-            throw new Exception();
-        } catch (Exception e) {
-            sb.append("\n" + "без " + (valueNeeded-total));
-        }*/
         output = sb.toString();
 
-
-                /*if (a.getValue() <= valueNeeded)
-                {
-                    int aCount = 0;
-                    int aTotal = a.getCount();
-                    while (aTotal > 0 && valueNeeded < a.getValue()) {
-                        valueNeeded -= a.getValue();
-                        aTotal--;
-                        a.setCount(aTotal);
-                        moneyInTotal -= a.getValue();
-                        aCount++;
-                    }
-                    sb.append(a.getValue()+"="+aCount+", ");
-                }
-            }
-        }
-        sb.append("всего " + value);
-        output = sb.toString();*/
     }
 
     public void dump(String command)
