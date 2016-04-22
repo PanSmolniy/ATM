@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -47,44 +48,45 @@ public class ATM
 
         output = "";
         String command = stdin.readLine().toLowerCase();
+        output = ">" + command+"\n";
 
         String inputsArray[] = command.split(" ");
         switch (inputsArray[0]) {
-            case "put" : put(command, inputsArray); break;
-            case "get" : get(command, Integer.parseInt(inputsArray[1])); break;
-            case "dump" : dump(command); break;
-            case "state" : state(command); break;
-            case "quit" : quit(command); break;
-            default:error(command);
+            case "put" : put(inputsArray); break;
+            case "get" : get(Integer.parseInt(inputsArray[1])); break;
+            case "dump" : dump(); break;
+            case "state" : state(); break;
+            case "quit" : quit(); break;
+            default:error();
 
         }
     }
 
-    public void error(String command)
+    public void error()
     {
-        System.out.println(">"+command);
-        output = "Неправильный ввод";
+        output += "Неправильный ввод";
     }
 
-    public void put(String command, String[] arr)
+    public void put(String[] arr)
     {
-        //output = "";
-        System.out.println(">"+command);
         try {
-            countMoneyInTotal(Integer.parseInt(arr[1]), Integer.parseInt(arr[2]));
-        } catch (ArrayIndexOutOfBoundsException e)
-        {
-            output = "Вы не указали, сколько купюр хотите внести.";
+            output += countMoneyInTotal(Integer.parseInt(arr[1]), Integer.parseInt(arr[2]));
         }
+        catch (ArrayIndexOutOfBoundsException e)
+        {
+            output += "Вы не указали, сколько купюр хотите внести.";
+        } catch (NumberFormatException nfe)
+        {
+            output += "Вторым и третьим аргументами должны быть числа";
+        }
+
     }
 
-    public void get(String command, int value)
+    public void get(int value)
     {
         int valueNeeded = value;
-        StringBuilder sb = new StringBuilder("");
-        System.out.println(">" + command);
+        StringBuilder sb = new StringBuilder();
         int total = 0;
-        //int rest = 0;
 
         List<Banknotes> banknotes = Arrays.asList(Banknotes.values());
         BanknotesComparator comp = new BanknotesComparator();
@@ -117,13 +119,12 @@ public class ATM
         sb.append("всего " + total);
         if (valueNeeded > 0) sb.append("\nбез " + valueNeeded);
 
-        output = sb.toString();
+        output += sb.toString();
 
     }
 
-    public void dump(String command)
+    public void dump()
     {
-        System.out.println(">" + command);
 
         List<Banknotes> list = Arrays.asList(Banknotes.values());
 
@@ -137,34 +138,35 @@ public class ATM
             if (list.indexOf(a) != (list.size()-1))
             sb.append("\n");
         }
-        output = sb.toString();
+        output += sb.toString();
     }
 
-    public void state(String command)
+    public void state()
     {
-        //output = "";
-        System.out.println(">" + command);
-        output = moneyInTotal+"";
+        output += moneyInTotal+"";
     }
 
-    public void quit(String command)
+    public void quit()
     {
+        showUserData();
         isWorking = false;
-        System.out.println(">" + command);
+        //System.out.println(">" + command);
     }
 
-    public void countMoneyInTotal(int banknote, int amount)
+    public String countMoneyInTotal(int banknote, int amount)
     {
         Banknotes[] banknotes = Banknotes.values();
+        String result = "";
         for (Banknotes banknote1 : banknotes) {
             Banknotes b;
             if (banknote == banknote1.getValue()) {
                 b = banknote1;
                 b.setCount(b.getCount() + amount);
                 moneyInTotal += banknote * amount;
-                output = "всего " + moneyInTotal;
+                result = "всего " + moneyInTotal;
                 break;
-            } else output = "Нет такой банкноты";
+            } else result =  "Нет такой банкноты " + banknote;
         }
+        return result;
     }
 }
