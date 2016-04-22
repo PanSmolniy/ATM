@@ -70,7 +70,12 @@ public class ATM
     {
         //output = "";
         System.out.println(">"+command);
-        countMoneyInTotal(Integer.parseInt(arr[1]), Integer.parseInt(arr[2]));
+        try {
+            countMoneyInTotal(Integer.parseInt(arr[1]), Integer.parseInt(arr[2]));
+        } catch (ArrayIndexOutOfBoundsException e)
+        {
+            output = "Вы не указали, сколько купюр хотите внести.";
+        }
     }
 
     public void get(String command, int value)
@@ -82,40 +87,38 @@ public class ATM
         int rest = 0;
 
         List<Banknotes> banknotes = Arrays.asList(Banknotes.values());
-        
+        BanknotesComparator comp = new BanknotesComparator();
+        Collections.sort(banknotes, comp);
+
         while (valueNeeded > 0 && moneyInTotal > 0) {
             for (Banknotes a : banknotes) {
                 int aCount = 0;
+                int count = a.getCount();
                 if (a.getValue() <= valueNeeded) {
                     if (a.getCount() > 0) {
+                        sb.append(a.getValue()+"=");
                         do {
-
                             aCount++;
                             valueNeeded -= a.getValue();
                             total += a.getValue();
-                            a.setCount(a.getCount() - aCount);
+                            a.setCount(count - aCount);
                             moneyInTotal -= a.getValue();
-                        } while (valueNeeded > 0 || a.getCount() == 0);
+                        } while (valueNeeded > 0 && a.getCount() > 0);
+                        sb.append(aCount+", ");
                     }
                 }
             }
         }
         sb.append("всего " + total);
+
+
+
+       /* if (total < valueNeeded) try {
+            throw new Exception();
+        } catch (Exception e) {
+            sb.append("\n" + "без " + (valueNeeded-total));
+        }*/
         output = sb.toString();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
                 /*if (a.getValue() <= valueNeeded)
