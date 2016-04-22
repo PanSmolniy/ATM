@@ -5,31 +5,20 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-//
-//
-//
-//
 public class ATM
 {
-
     int moneyInTotal;
-    //int banknotes;
     boolean isWorking;
-
 
     BufferedReader stdin;
     String output;
     List<Banknotes> banknotes;
-
-
 
     public ATM() {
         isWorking = true;
         moneyInTotal = 0;
         stdin = new BufferedReader(new InputStreamReader(System.in));
         output = "Hello";
-
-
     }
 
     public void run() throws IOException {
@@ -60,7 +49,6 @@ public class ATM
             case "state" : state(); break;
             case "quit" : quit(); break;
             default:error();
-
         }
     }
 
@@ -81,7 +69,6 @@ public class ATM
         {
             output += "Вторым и третьим аргументами должны быть числа";
         }
-
     }
 
     public void get(int value)
@@ -128,7 +115,6 @@ public class ATM
             }
         }
         else sb.append("Невозможно выдать запаршиваемую сумму");
-
 
         output += sb.toString();
     }
