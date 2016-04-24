@@ -7,12 +7,12 @@ import java.util.List;
 
 public class ATM
 {
-    int moneyInTotal;
-    boolean isWorking;
+    private int moneyInTotal;
+    private boolean isWorking;
 
-    BufferedReader stdin;
-    String output;
-    List<Banknotes> banknotes;
+    private BufferedReader stdin;
+    private String output;
+    private List<Banknotes> banknotes;
 
     public ATM() {
         isWorking = true;
@@ -30,12 +30,12 @@ public class ATM
         }
     }
 
-    public void showUserData()
+    private  void showUserData()
     {
         System.out.println(output);
     }
 
-    public void readUserData() throws IOException {
+    private  void readUserData() throws IOException {
 
         output = "";
         String command = stdin.readLine().toLowerCase();
@@ -52,12 +52,12 @@ public class ATM
         }
     }
 
-    public void error()
+    private  void error()
     {
         output += "Неправильный ввод";
     }
 
-    public void put(String[] arr)
+    private  void put(String[] arr)
     {
         try {
             output += countMoneyInTotal(Integer.parseInt(arr[1]), Integer.parseInt(arr[2]));
@@ -71,7 +71,7 @@ public class ATM
         }
     }
 
-    public void get(int value)
+    private void get(int value)
     {
         int valueNeeded = value;
         StringBuilder sb = new StringBuilder();
@@ -119,7 +119,7 @@ public class ATM
         output += sb.toString();
     }
 
-    public void dump()
+    private void dump()
     {
         initializeBanknotes();
 
@@ -134,18 +134,18 @@ public class ATM
         output += sb.toString();
     }
 
-    public void state()
+    private void state()
     {
         output += moneyInTotal+"";
     }
 
-    public void quit()
+    private void quit()
     {
         showUserData();
         isWorking = false;
     }
 
-    public String countMoneyInTotal(int banknote, int amount)
+    private String countMoneyInTotal(int banknote, int amount)
     {
         initializeBanknotes();
         String result = "";
